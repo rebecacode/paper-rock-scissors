@@ -5,12 +5,14 @@
   "scripts": {
     "serve": "vue-cli-service serve --modern",
     "build": "vue-cli-service build --modern",
-    "lint": "npm run lint:all:eslint && npm run lint:all:prettier",
+    "lint": "npm run lint:all:eslint && npm run lint:all:stylelint && npm run lint:all:prettier",
     "build-dev": "vue-cli-service build --modern --mode development",
     "build-qa": "vue-cli-service build --modern --mode qa",
     "lint:all:eslint": "npm run lint:eslint -- --ext .js,.vue ./src",
+    "lint:all:stylelint": "npm run lint:stylelint \"src/**/*.{vue,scss}\"",
     "lint:all:prettier": "npm run lint:prettier -- \"**/*.{js,json,css,scss,vue,html,md}\"",
     "lint:eslint": "eslint --fix",
+    "lint:stylelint": "stylelint --fix",
     "lint:prettier": "prettier --write --loglevel warn"
   },
   "dependencies": {
@@ -20,6 +22,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
     "@vue/cli-plugin-babel": "^4.5.11",
     "@vue/cli-plugin-eslint": "^4.5.11",
     "@vue/cli-plugin-router": "^4.5.11",
@@ -38,6 +41,12 @@
     "prettier": "^2.2.1",
     "sass": "^1.32.5",
     "sass-loader": "^10.1.1",
+    "stylelint": "^13.10.0",
+    "stylelint-config-css-modules": "^2.2.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-recess-order": "^2.3.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-scss": "^3.19.0",
     "vue-svg-loader": "0.12.0",
     "vue-template-compiler": "^2.6.12"
   },
