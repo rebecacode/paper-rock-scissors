@@ -1,6 +1,6 @@
 # 24G Vue Template
 
-![Version](https://img.shields.io/badge/Version-2.0.2-yellow)
+![Version](https://img.shields.io/badge/Version-2.0.4-yellow)
 
 ## Project setup
 
