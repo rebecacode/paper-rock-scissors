@@ -1,5 +1,7 @@
 # 24G Vue Template
 
+![Version](https://img.shields.io/badge/Version-2.0.4-yellow)
+
 ## Project setup
 
 ```
@@ -47,3 +49,22 @@ pages: {
 ###
 
 See [Vue Configuration Reference](https://cli.vuejs.org/config/).
+
+## Environments
+
+- Prod: https://example.com
+- QA: https://qa.example.com
+- Dev: https://dev.example.com
+
+## Browsers Supported
+
+Latest unless stated otherwise
+
+- Edge
+- Safari
+- Firefox
+- Chrome (+/-1)
+
+## Read More
+
+[Componenents](src/components/README.md)

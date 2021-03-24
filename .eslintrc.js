@@ -18,6 +18,8 @@ module.exports = {
     'global-require': 'off',
     // Disable underscore dangle restriction
     'no-underscore-dangle': 'off',
+    // Disable prefer-destructuring for arrays only
+    'prefer-destructuring': ['error', { object: true, array: false }],
 
     // Vue rules (mostly to enforce airbnb in <template>)
     'vue/no-unused-components': process.env.PRE_COMMIT ? 'error' : 'warn',
