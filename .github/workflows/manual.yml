@@ -1,0 +1,84 @@
+name: Manual Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy. Value can be comma seperated list. Valid values are dev,qa,prod.'
+        default: 'dev'
+jobs:
+  build_deploy_dev:
+    if: ${{ contains( github.event.inputs.environment, 'dev') }}
+    name: Dev Build/Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node dependencies
+        run: npm install
+      - name: Vue Build
+        run: npm run build-dev
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.DEV_AWS_DEFAULT_REGION }}
+          SOURCE_DIR: "./dist/"
+  build_deploy_qa:
+    if: ${{ contains( github.event.inputs.environment, 'qa') }}
+    name: QA Build/Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node dependencies
+        run: npm install
+      - name: Vue Build
+        run: npm run build-qa
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.QA_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.QA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.QA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.QA_AWS_DEFAULT_REGION }}
+          SOURCE_DIR: "./dist/"
+      # - name: invalidate
+      #   uses: chetan/invalidate-cloudfront-action@master
+      #   env:
+      #     DISTRIBUTION: ${{ secrets.QA_CLOUDFRONT_ID }}
+      #     PATHS: '/index.html /static/*'
+      #     AWS_REGION: ${{ secrets.QA_AWS_DEFAULT_REGION }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.QA_AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.QA_AWS_SECRET_ACCESS_KEY }}
+  build_deploy_prod:
+    if: ${{ contains( github.event.inputs.environment, 'prod') }}
+    name: Prod Build/Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node dependencies
+        run: npm install
+      - name: Vue Build
+        run: npm run build
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.PROD_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.PROD_AWS_DEFAULT_REGION }}
+          SOURCE_DIR: "./dist/"
+      # - name: invalidate
+      #   uses: chetan/invalidate-cloudfront-action@master
+      #   env:
+      #     DISTRIBUTION: ${{ secrets.PROD_CLOUDFRONT_ID }}
+      #     PATHS: '/index.html /static/*'
+      #     AWS_REGION: ${{ secrets.PROD_AWS_DEFAULT_REGION }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}

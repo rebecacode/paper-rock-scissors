@@ -1,0 +1,33 @@
+name: QA Pipeline
+on:
+  push:
+    branches:
+      - "release/**"
+jobs:
+  build_deploy:
+    name: QA Build/Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node dependencies
+        run: npm install
+      - name: Vue Build
+        run: npm run build-qa
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.QA_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.QA_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.QA_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.QA_AWS_DEFAULT_REGION }}
+          SOURCE_DIR: "./dist/"
+      # - name: invalidate
+      #   uses: chetan/invalidate-cloudfront-action@master
+      #   env:
+      #     DISTRIBUTION: ${{ secrets.QA_CLOUDFRONT_ID }}
+      #     PATHS: '/index.html /static/*'
+      #     AWS_REGION: ${{ secrets.QA_AWS_DEFAULT_REGION }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.QA_AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.QA_AWS_SECRET_ACCESS_KEY }}
