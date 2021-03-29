@@ -1,0 +1,25 @@
+name: Dev Pipeline
+on:
+  push:
+    branches:
+      - "feature/**"
+jobs:
+  build_deploy:
+    name: Dev Build/Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node dependencies
+        run: npm install
+      - name: Vue Build
+        run: npm run build-dev
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.DEV_AWS_DEFAULT_REGION }}
+          SOURCE_DIR: "./dist/"
