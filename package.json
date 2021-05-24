@@ -9,11 +9,11 @@
     "build-dev": "vue-cli-service build --modern --mode development",
     "build-qa": "vue-cli-service build --modern --mode qa",
     "lint:all:eslint": "npm run lint:eslint -- --ext .js,.vue ./src",
-    "lint:all:stylelint": "npm run lint:stylelint \"src/**/*.{vue,scss}\"",
     "lint:all:prettier": "npm run lint:prettier -- \"**/*.{js,json,css,scss,vue,html,md}\"",
+    "lint:all:stylelint": "npm run lint:stylelint \"src/**/*.{vue,scss}\"",
     "lint:eslint": "eslint --fix",
-    "lint:stylelint": "stylelint --fix",
-    "lint:prettier": "prettier --write --loglevel warn"
+    "lint:prettier": "prettier --write --loglevel warn",
+    "lint:stylelint": "stylelint --fix"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -23,11 +23,11 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.8",
-    "@vue/cli-plugin-babel": "^4.5.11",
-    "@vue/cli-plugin-eslint": "^4.5.11",
-    "@vue/cli-plugin-router": "^4.5.11",
-    "@vue/cli-plugin-vuex": "^4.5.11",
-    "@vue/cli-service": "^4.5.11",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-eslint": "^4.5.13",
+    "@vue/cli-plugin-router": "^4.5.13",
+    "@vue/cli-plugin-vuex": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
     "@vue/eslint-config-airbnb": "^5.3.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
