@@ -2,6 +2,12 @@
 
 ![Version](https://img.shields.io/badge/Version-2.0.4-yellow)
 
+| Env | FE URL | API URL | Assets URL |
+|-----|--------|---------|------------|
+| Dev | [<dev frontend url>](<dev frontend url>) | [<dev api url>](<dev api url>) | [<dev asset url url>](<dev frontend url>) |
+| QA | [<qa frontend url>](<qa frontend url>) | [<qa api url>](<qa api url>) | [<qa asset url url>](<qa frontend url>) |
+| Prod | [<prod frontend url>](<prod frontend url>) | [<prod api url>](<prod api url>) | [<prod asset url url>](<prod frontend url>) |
+
 ## Project setup
 
 ```
