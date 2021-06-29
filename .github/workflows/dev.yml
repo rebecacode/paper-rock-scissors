@@ -29,7 +29,7 @@ jobs:
       - name: Vue Build
         run: npm run build-dev
       - name: S3 Sync
-        run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --acl public-read --follow-symlinks --delete
+        run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
           SOURCE_DIR: './dist/'

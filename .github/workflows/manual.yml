@@ -10,75 +10,86 @@ jobs:
     if: ${{ contains( github.event.inputs.environment, 'dev') }}
     name: Dev Build/Deploy
     runs-on: ubuntu-latest
+    env:
+      VAULT_TOKEN: ${{ secrets.DEV_VAULT_TOKEN }}
+      VAULT_ROLE: ${{ secrets.DEV_VAULT_ROLE }}
+      VAULT_ADDR: 'https://vault.24g.dev'
+      SECRET_PATH: ${{ secrets.DEV_SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
+      - name: Vault Pipeline Auth
+        id: vault_aws
+        uses: twentyfourg/vault-aws-action@1.0.0
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ steps.vault_aws.outputs.access_key }}
+          aws-secret-access-key: ${{ steps.vault_aws.outputs.secret_key }}
+          aws-session-token: ${{ steps.vault_aws.outputs.session_token }}
+          aws-region: us-east-1
       - name: Install Node dependencies
         run: npm install
       - name: Vue Build
         run: npm run build-dev
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
+      - name: S3 Sync
+        run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --acl public-read --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.DEV_AWS_DEFAULT_REGION }}
-          SOURCE_DIR: "./dist/"
+          SOURCE_DIR: './dist/'
   build_deploy_qa:
     if: ${{ contains( github.event.inputs.environment, 'qa') }}
     name: QA Build/Deploy
     runs-on: ubuntu-latest
+    env:
+      VAULT_TOKEN: ${{ secrets.QA_VAULT_TOKEN }}
+      VAULT_ROLE: ${{ secrets.QA_VAULT_ROLE }}
+      VAULT_ADDR: 'https://vault.24g.dev'
+      SECRET_PATH: ${{ secrets.QA_SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
+      - name: Vault Pipeline Auth
+        id: vault_aws
+        uses: twentyfourg/vault-aws-action@1.0.0
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ steps.vault_aws.outputs.access_key }}
+          aws-secret-access-key: ${{ steps.vault_aws.outputs.secret_key }}
+          aws-session-token: ${{ steps.vault_aws.outputs.session_token }}
+          aws-region: us-east-1
       - name: Install Node dependencies
         run: npm install
       - name: Vue Build
         run: npm run build-qa
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
+      - name: S3 Sync
+        run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --acl public-read --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.QA_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.QA_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.QA_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.QA_AWS_DEFAULT_REGION }}
-          SOURCE_DIR: "./dist/"
-      # - name: invalidate
-      #   uses: chetan/invalidate-cloudfront-action@master
-      #   env:
-      #     DISTRIBUTION: ${{ secrets.QA_CLOUDFRONT_ID }}
-      #     PATHS: '/index.html /static/*'
-      #     AWS_REGION: ${{ secrets.QA_AWS_DEFAULT_REGION }}
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.QA_AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.QA_AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: './dist/'
   build_deploy_prod:
     if: ${{ contains( github.event.inputs.environment, 'prod') }}
     name: Prod Build/Deploy
     runs-on: ubuntu-latest
+    env:
+      VAULT_TOKEN: ${{ secrets.PROD_VAULT_TOKEN }}
+      VAULT_ROLE: ${{ secrets.PROD_VAULT_ROLE }}
+      VAULT_ADDR: 'https://vault.24g.dev'
+      SECRET_PATH: ${{ secrets.PROD_SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
+      - name: Vault Pipeline Auth
+        id: vault_aws
+        uses: twentyfourg/vault-aws-action@1.0.0
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ steps.vault_aws.outputs.access_key }}
+          aws-secret-access-key: ${{ steps.vault_aws.outputs.secret_key }}
+          aws-session-token: ${{ steps.vault_aws.outputs.session_token }}
+          aws-region: us-east-1
       - name: Install Node dependencies
         run: npm install
       - name: Vue Build
         run: npm run build
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
+      - name: S3 Sync
+        run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --acl public-read --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.PROD_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.PROD_AWS_DEFAULT_REGION }}
-          SOURCE_DIR: "./dist/"
-      # - name: invalidate
-      #   uses: chetan/invalidate-cloudfront-action@master
-      #   env:
-      #     DISTRIBUTION: ${{ secrets.PROD_CLOUDFRONT_ID }}
-      #     PATHS: '/index.html /static/*'
-      #     AWS_REGION: ${{ secrets.PROD_AWS_DEFAULT_REGION }}
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: './dist/'
