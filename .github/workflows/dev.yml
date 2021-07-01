@@ -8,11 +8,12 @@ jobs:
   build_deploy:
     name: Dev Build/Deploy
     runs-on: ubuntu-latest
+    environment: dev
     env:
-      VAULT_TOKEN: ${{ secrets.DEV_VAULT_TOKEN }}
-      VAULT_ROLE: ${{ secrets.DEV_VAULT_ROLE }}
+      VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      VAULT_ROLE: ${{ secrets.AULT_ROLE }}
       VAULT_ADDR: 'https://vault.24g.dev'
-      SECRET_PATH: ${{ secrets.DEV_SECRET_PATH }}
+      SECRET_PATH: ${{ secrets.SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
       - name: Vault Pipeline Auth
@@ -31,5 +32,20 @@ jobs:
       - name: S3 Sync
         run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET }}
           SOURCE_DIR: './dist/'
+      # Only invalidate CloudFront if caching is enabled.
+      # Can't use the secret context [1] in a conditional directly
+      - name: Invalidate CloudFront
+        env:
+          CACHE_ENABLED: ${{ secrets.CACHE_ENABLED }}
+        run: |
+          if [ "$CACHE_ENABLED" == "true" ]
+            then
+              echo "Invalidating Cache:"
+              aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/index.html" "/static/*"
+            else
+              echo "Caching is disabled. No need to Invalidate."
+          fi
+
+# [1]: https://github.com/actions/runner/issues/520
