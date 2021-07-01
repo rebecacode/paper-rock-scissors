@@ -7,11 +7,12 @@ jobs:
   build_deploy:
     name: Prod Build/Deploy
     runs-on: ubuntu-latest
+    environment: prod
     env:
-      VAULT_TOKEN: ${{ secrets.PROD_VAULT_TOKEN }}
-      VAULT_ROLE: ${{ secrets.PROD_VAULT_ROLE }}
+      VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      VAULT_ROLE: ${{ secrets.VAULT_ROLE }}
       VAULT_ADDR: 'https://vault.24g.dev'
-      SECRET_PATH: ${{ secrets.PROD_SECRET_PATH }}
+      SECRET_PATH: ${{ secrets.SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
       - name: Vault Pipeline Auth
@@ -30,13 +31,20 @@ jobs:
       - name: S3 Sync
         run: aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.PROD_S3_BUCKET }}
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET }}
           SOURCE_DIR: './dist/'
-      # - name: invalidate
-      #   uses: chetan/invalidate-cloudfront-action@master
-      #   env:
-      #     DISTRIBUTION: ${{ secrets.PROD_CLOUDFRONT_ID }}
-      #     PATHS: '/index.html /static/*'
-      #     AWS_REGION: ${{ secrets.PROD_AWS_DEFAULT_REGION }}
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+      # Only invalidate CloudFront if caching is enabled.
+      # Can't use the secret context [1] in a conditional directly
+      - name: Invalidate CloudFront
+        env:
+          CACHE_ENABLED: ${{ secrets.CACHE_ENABLED }}
+        run: |
+          if [ "$CACHE_ENABLED" == "true" ]
+            then
+              echo "Invalidating Cache:"
+              aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/index.html" "/static/*"
+            else
+              echo "Caching is disabled. No need to Invalidate."
+          fi
+
+# [1]: https://github.com/actions/runner/issues/520
