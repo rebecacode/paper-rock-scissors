@@ -11,7 +11,7 @@ jobs:
     environment: dev
     env:
       VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-      VAULT_ROLE: ${{ secrets.AULT_ROLE }}
+      VAULT_ROLE: ${{ secrets.VAULT_ROLE }}
       VAULT_ADDR: 'https://vault.24g.dev'
       SECRET_PATH: ${{ secrets.SECRET_PATH }}
     steps:
