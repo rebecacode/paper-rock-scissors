@@ -20,6 +20,16 @@ module.exports = {
     'no-underscore-dangle': 'off',
     // Disable prefer-destructuring for arrays only
     'prefer-destructuring': ['error', { object: true, array: false }],
+    // Allow for-of statements. Only way to do this is to change the default Airbnb rules,
+    // so this just disallows for-in statements.
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'ForInStatement',
+        message:
+          'for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.',
+      },
+    ],
 
     // Vue rules (mostly to enforce airbnb in <template>)
     'vue/no-unused-components': process.env.PRE_COMMIT ? 'error' : 'warn',
