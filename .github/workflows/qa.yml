@@ -2,9 +2,10 @@ name: QA Pipeline
 on:
   push:
     branches:
-      - "release/**"
+      - 'release/**'
 jobs:
   build_deploy:
+    if: github.repository != 'twentyfourg/vue-template'
     name: QA Build/Deploy
     runs-on: ubuntu-latest
     environment: qa
