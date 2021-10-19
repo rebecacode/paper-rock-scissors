@@ -6,6 +6,7 @@ on:
       - 'feature/**'
 jobs:
   build_deploy:
+    if: github.repository != 'twentyfourg/vue-template'
     name: Dev Build/Deploy
     runs-on: ubuntu-latest
     environment: dev

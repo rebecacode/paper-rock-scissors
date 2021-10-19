@@ -2,9 +2,10 @@ name: Prod Pipeline
 on:
   push:
     branches:
-      - "master"
+      - 'master'
 jobs:
   build_deploy:
+    if: github.repository != 'twentyfourg/vue-template'
     name: Prod Build/Deploy
     runs-on: ubuntu-latest
     environment: prod
@@ -46,5 +47,23 @@ jobs:
             else
               echo "Caching is disabled. No need to Invalidate."
           fi
-
+  release:
+    if: github.repository == 'twentyfourg/vue-template'
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install dependencies
+        run: npm install
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
 # [1]: https://github.com/actions/runner/issues/520
