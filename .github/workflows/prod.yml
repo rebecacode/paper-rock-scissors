@@ -16,6 +16,9 @@ jobs:
       SECRET_PATH: ${{ secrets.SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
       - name: Vault Pipeline Auth
         id: vault_aws
         uses: twentyfourg/vault-aws-action@1.0.0
@@ -58,9 +61,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: '16.x'
       - name: Install dependencies
         run: npm install --only=dev
       - name: Release

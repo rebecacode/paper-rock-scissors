@@ -16,6 +16,9 @@ jobs:
       SECRET_PATH: ${{ secrets.SECRET_PATH }}
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
       - name: Vault Pipeline Auth
         id: vault_aws
         uses: twentyfourg/vault-aws-action@1.0.0
