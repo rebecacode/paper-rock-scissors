@@ -72,7 +72,7 @@
     ]
   },
   "gitHooks": {
-    "commit-msg": "npx --no-install commitlint --edit $1",
+    "commit-msg": "npx --no-install commitlint --edit",
     "pre-commit": "cross-env PRE_COMMIT=true lint-staged"
   },
   "readme": "ERROR: No README data found!"
