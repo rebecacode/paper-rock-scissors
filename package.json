@@ -1,9 +1,9 @@
 {
-  "name": "vue-template",
+  "name": "rps-game-template",
   "version": "2.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --modern",
+    "serve": "vue-cli-service serve --host localhost",
     "build": "vue-cli-service build --modern",
     "lint": "npm run lint:all:eslint && npm run lint:all:stylelint && npm run lint:all:prettier",
     "build-dev": "vue-cli-service build --modern --mode development",

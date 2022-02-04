@@ -3,7 +3,7 @@ module.exports = {
     index: {
       // when using title option,
       // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-      title: 'Vue Template',
+      title: 'Rock Paper Scissors',
 
       // The following properties are Vue defaults, but required when using the
       // `pages` configuration.

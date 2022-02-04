@@ -1,5 +1,6 @@
 // Mobile-first responsive breakpoints
 $breakpoints: (
+  xs: 375px,
   sm: 576px,
   md: 768px,
   lg: 992px,
@@ -7,6 +8,11 @@ $breakpoints: (
   xxl: 1600px,
 ) !default;
 
+@mixin bp-xs-phone {
+  @media (min-width: map-get($breakpoints, 'xs')) {
+    @content;
+  }
+}
 @mixin bp-sm-phone-landscape {
   @media (min-width: map-get($breakpoints, 'sm')) {
     @content;
@@ -41,5 +47,30 @@ $breakpoints: (
 @mixin bp-custom-min($min-width) {
   @media (min-width: $min-width + 'px') {
     @content;
+  }
+}
+
+// Mixin for border color in options for bets
+@mixin set-border-color($modifier, $gradient-from, $gradient-to) {
+  &--#{$modifier} {
+    ::before {
+      position: absolute;
+      top: -2.3rem;
+      left: -2.3rem;
+      z-index: -2;
+      width: $option-size;
+      height: $option-size;
+      content: '';
+      background: radial-gradient($gradient-from, $gradient-to);
+      border-radius: 50%;
+      box-shadow: 0 1rem 0.1rem 0.1rem darken($gradient-to, 24%);
+
+      @include bp-md-tablet {
+        top: -2.5rem;
+        left: -2.5rem;
+        width: ($option-size + 5);
+        height: ($option-size + 5);
+      }
+    }
   }
 }

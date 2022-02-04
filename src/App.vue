@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view />
   </div>
 </template>
@@ -11,25 +7,26 @@
 <style lang="scss">
 // Allow element/type selectors, because this is global CSS.
 // stylelint-disable selector-max-type
+@import '@/assets/scss/_base.scss';
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
-  text-align: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html {
+  font-size: 62.5%;
 }
 
-#nav {
-  padding: 30px;
+body {
+  font-family: $font-family;
+  font-size: 3rem;
+  background: $background;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+a {
+  text-decoration: none;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+#app {
+  width: 100%;
+  min-height: 100vh;
+  font-family: $font-family;
+  color: #2c3e50;
 }
 </style>

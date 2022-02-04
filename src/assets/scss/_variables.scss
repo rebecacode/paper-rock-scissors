@@ -1,1 +1,26 @@
 // Place SCSS variables here
+$font-family: 'Barlow Semi Condensed', sans-serif;
+
+// Colors for background and text
+$background: radial-gradient(hsl(214, 47%, 23%), hsl(237, 49%, 15%));
+$background-from: hsl(214, 47%, 23%);
+$border-color: hsl(217, 16%, 45%);
+$color-title-score: hsl(229, 64%, 46%);
+$color-score: hsl(229, 25%, 31%);
+
+// Color for bets
+$paper-gradient-from: hsl(230, 89%, 62%);
+$paper-gradient-to: hsl(230, 89%, 65%);
+$rock-gradient-from: hsl(349, 71%, 52%);
+$rock-gradient-to: hsl(349, 70%, 56%);
+$scissors-gradient-from: hsl(39, 89%, 49%);
+$scissors-gradient-to: hsl(40, 84%, 53%);
+// Bonus
+$lizard-gradient-from: hsl(261, 73%, 60%);
+$lizard-gradient-to: hsl(261, 72%, 63%);
+$spock-gradient-from: hsl(189, 59%, 53%);
+$spock-gradient-to: hsl(189, 58%, 57%);
+
+// sizes
+$option-size: 13rem;
+$score-size: 10rem;
